@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the christmas spinner 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    img {
+      width: 16rem;
+      height: 16rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <h1>The Christmas Spinner 2</h1>
+  <p>click it</p>
+  <br>
+  <br>
+  <img src="./christmas.jpg" alt="christmas">
+  <script defer>
+    let q = document.querySelector('img')
+    let x = 0
+    let y = 0
+    q.addEventListener('mousemove', (event) => {
+      let amtx = event.offsetX - q.offsetWidth / 2
+      amtx -= q.offsetWidth / 2 * Math.sign(amtx)
+      x += amtx
+      q.style.transform = `translate(${x}px, ${y}px)`
+    })
+  </script>
+</body>
+</html>
