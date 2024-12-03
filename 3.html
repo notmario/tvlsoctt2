@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the christmas paint</title>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    br {
+      height: 1rem
+    }
+    canvas {
+      width: 400px;
+      height: 350px;
+      image-rendering: pixelated;
+      background-color: white;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      width: 400px;
+    }
+    .buttons > div {
+      width: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <h1>The Christmas Paint</h1>
+  <p>paint something Jolly</p>
+  <br>
+  <br>
+  <br>
+  <canvas width="200" height="175"></canvas>
+  <div class="buttons"></div>
+  <script defer>
+    let painting = false
+    let canvas = document.querySelector("canvas")
+    let ctx = canvas.getContext("2d")
+    ctx.lineWidth = 4
+    ctx.lineStyle = "black"
+    ctx.save()
+    document.addEventListener("mousedown", () => {
+      painting = true
+    })
+    document.addEventListener("mouseup", () => {
+      painting = false
+    })
+    canvas.addEventListener("mousemove", (e) => {
+      if (painting) {
+        ctx.lineTo(e.offsetX / 2, e.offsetY / 2)
+        ctx.stroke()
+      } else {
+        ctx.moveTo(e.offsetX / 2, e.offsetY / 2)
+      }
+    })
+
+    let buttoncontainer = document.querySelector(".buttons")
+    let create_button = (text, fn) => {
+      let btn = document.createElement("button")
+      btn.innerHTML = text
+      btn.addEventListener("click", fn)
+      buttoncontainer.appendChild(btn)
+    }
+    let create_spacer = () => {
+      let spacer = document.createElement("div")
+      buttoncontainer.appendChild(spacer)
+    }
+    create_button("clear", ()=>{ctx.clearRect(0, 0, 500, 500); ctx.beginPath()})
+    create_spacer()
+    create_button("black", ()=>{ctx.strokeStyle = "black"; ctx.beginPath()})
+    create_button("white", ()=>{ctx.strokeStyle = "white"; ctx.beginPath()})
+    create_button("red", ()=>{ctx.strokeStyle = "red"; ctx.beginPath()})
+    create_button("green", ()=>{ctx.strokeStyle = "green"; ctx.beginPath()})
+    create_button("blue", ()=>{ctx.strokeStyle = "blue"; ctx.beginPath()})
+    create_button("yellow", ()=>{ctx.strokeStyle = "yellow"; ctx.beginPath()})
+    create_button("brown", ()=>{ctx.strokeStyle = "brown"; ctx.beginPath()})
+    create_spacer()
+    create_button("thin", ()=>{ctx.lineWidth = 2; ctx.beginPath()})
+    create_button("normal", ()=>{ctx.lineWidth = 4; ctx.beginPath()})
+    create_button("thick", ()=>{ctx.lineWidth = 8; ctx.beginPath()})
+  </script>
+</body>
+</html>
