@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Christmas Gambling</title>
+  <!-- red themecol -->
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    div.imgs {
+      display: flex;
+    }
+    div.imgs img {
+      width: 10rem;
+      height: 10rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <h1>The Christmas GAMBLING.</h1>
+  <div class="imgs">
+    <img src="christmas.jpg">
+    <img src="christmas.jpg">
+    <img src="christmas.jpg">
+  </div>
+  <h2>$10</h2>
+  <button>SPIN</button>
+  <audio src="click.wav" preload></audio>
+  <audio src="denied.wav" preload></audio>
+  <audio src="kaching.wav" preload></audio>
+  <script defer>
+    let money = 10
+    let button = document.querySelector("button")
+    let moneydisplay = document.querySelector("h2")
+    let imgs = [...document.querySelectorAll("img")]
+    let spinning = false
+
+    let imagelist = ["christmas.jpg", "tree.jpg", "present.jpg", "seven.jpg", "balls.jpg"]
+    let chosenimgs = []
+
+    button.addEventListener("click", ()=>{
+      if (spinning) return
+      spinning = true
+      money -= 1
+      moneydisplay.innerText = "$" + money
+
+      chosenimgs = []
+      imgs.forEach((elem) => {elem.src = ""; chosenimgs.push(
+        imagelist[Math.floor(Math.random() * imagelist.length)]
+      )})
+
+      setTimeout(()=>{
+        imgs[0].src = chosenimgs[0]
+        document.querySelector('[src="click.wav"]').fastSeek(0)
+        document.querySelector('[src="click.wav"]').play()
+      }, 100)
+      setTimeout(()=>{
+        imgs[1].src = chosenimgs[1]
+        document.querySelector('[src="click.wav"]').fastSeek(0)
+        document.querySelector('[src="click.wav"]').play()
+      }, 200)
+      setTimeout(()=>{
+        imgs[2].src = chosenimgs[2]
+        document.querySelector('[src="click.wav"]').fastSeek(0)
+        document.querySelector('[src="click.wav"]').play()
+      }, 300)
+      setTimeout(()=>{
+        if (chosenimgs[0] == chosenimgs[1] && chosenimgs[1] == chosenimgs[2]) {
+          document.querySelector('[src="kaching.wav"]').fastSeek(0)
+          document.querySelector('[src="kaching.wav"]').play()
+          money += 40
+          moneydisplay.innerText = "$" + money
+        } else {
+          document.querySelector('[src="denied.wav"]').fastSeek(0)
+          document.querySelector('[src="denied.wav"]').play()
+        }
+        spinning = false
+      }, 400)
+    })
+  </script>
+</body>
+</html>
