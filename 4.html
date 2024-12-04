@@ -64,7 +64,7 @@
     let chosenimgs = []
 
     button.addEventListener("click", ()=>{
-      // if (spinning) return
+      if (spinning) return
       spinning = true
       money -= 1
       moneydisplay.innerText = "$" + money
@@ -90,16 +90,16 @@
         document.querySelector('[src="click.wav"]').play()
       }, 300)
       setTimeout(()=>{
+        spinning = false
         if (chosenimgs[0] == chosenimgs[1] && chosenimgs[1] == chosenimgs[2]) {
-          document.querySelector('[src="kaching.wav"]').fastSeek(0)
-          document.querySelector('[src="kaching.wav"]').play()
           money += 40
           moneydisplay.innerText = "$" + money
+          document.querySelector('[src="kaching.wav"]').fastSeek(0)
+          document.querySelector('[src="kaching.wav"]').play()
         } else {
           document.querySelector('[src="denied.wav"]').fastSeek(0)
           document.querySelector('[src="denied.wav"]').play()
         }
-        // spinning = false
       }, 400)
     })
   </script>
