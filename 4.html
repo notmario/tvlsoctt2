@@ -64,7 +64,7 @@
     let chosenimgs = []
 
     button.addEventListener("click", ()=>{
-      if (spinning) return
+      // if (spinning) return
       spinning = true
       money -= 1
       moneydisplay.innerText = "$" + money
@@ -99,7 +99,7 @@
           document.querySelector('[src="denied.wav"]').fastSeek(0)
           document.querySelector('[src="denied.wav"]').play()
         }
-        spinning = false
+        // spinning = false
       }, 400)
     })
   </script>
