@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the christmas spinner 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    img {
+      width: 16rem;
+      height: 16rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <h1>The Christmas Clicker 2</h1>
+  <p>now with the upgrades!!</p>
+  <br>
+  <br>
+  <img src="./christmas.jpg" alt="christmas">
+  <h2>0</h2>
+  <h3>+1 per click</h3>
+  <button class="upgrade1">Increase click amount (+1) ($10)</button>
+  <button class="upgrade2">Increase upgrade amount (+1) ($250)</button>
+  <button class="upgrade3">Increase upgrade operator (+1) ($1000000)</button>
+  <script src="omeganum.js"></script>
+  <audio src="yay.ogg" preload></audio>
+  <script defer>
+    let mainbtn = document.querySelector('img[alt="christmas"]')
+
+    let upgrade1 = document.querySelector(".upgrade1")
+    let upgrade2 = document.querySelector(".upgrade2")
+    let upgrade3 = document.querySelector(".upgrade3")
+
+    let amtlabel = document.querySelector("h2")
+    let clicklabel = document.querySelector("h3")
+
+    let current_amt = OmegaNum.fromNumber(0)
+    let click_amt = OmegaNum.fromNumber(1)
+    
+    let increase_amt = OmegaNum.fromNumber(1)
+    let increase_cost = OmegaNum.fromNumber(10)
+    let increase_arrows = -1
+    
+    let upgrade_amt_cost = OmegaNum.fromNumber(250)
+    let upgrade_operator_cost = OmegaNum.fromNumber(1000000)
+
+    let optext = "+"
+
+    mainbtn.addEventListener("click", () => {
+      current_amt = OmegaNum.add(current_amt, click_amt)
+      amtlabel.innerText = current_amt.toString()
+      
+      document.querySelector('[src="yay.ogg"]').currentTime = 0.07
+      document.querySelector('[src="yay.ogg"]').play()
+    })
+    upgrade1.addEventListener("click", () => {
+      if (OmegaNum.gte(current_amt, increase_cost)) {
+        current_amt = OmegaNum.sub(current_amt, increase_cost)
+        if (increase_arrows == -1) {
+          click_amt = OmegaNum.add(click_amt, increase_amt)
+        } else if (increase_arrows == 0) {
+          click_amt = OmegaNum.mul(click_amt, increase_amt)
+        } else {
+          click_amt = OmegaNum.arrow(click_amt, increase_arrows, increase_amt)
+        }
+        increase_cost = OmegaNum.add(increase_cost, 10)
+        
+        amtlabel.innerText = current_amt.toString()
+        upgrade1.innerText = `Increase click amount (${optext}${increase_amt}) ($${increase_cost})`
+        clicklabel.innerText = `+${click_amt.toString()} per click`
+      }
+    })
+    upgrade2.addEventListener("click", () => {
+      if (OmegaNum.gte(current_amt, upgrade_amt_cost)) {
+        current_amt = OmegaNum.sub(current_amt, upgrade_amt_cost)
+        amtlabel.innerText = current_amt.toString()
+        increase_amt = OmegaNum.add(increase_amt, 1)
+        upgrade1.innerText = `Increase click amount (${optext}${increase_amt}) ($${increase_cost})`
+        upgrade_amt_cost = OmegaNum.floor(OmegaNum.mul(upgrade_amt_cost, 1.01))
+        upgrade2.innerText = `Increase upgrade amount (+1) ($${upgrade_amt_cost})`
+      }
+    })
+    upgrade3.addEventListener("click", () => {
+      if (OmegaNum.gte(current_amt, upgrade_operator_cost)) {
+        current_amt = OmegaNum.sub(current_amt, upgrade_operator_cost)
+        amtlabel.innerText = current_amt.toString()
+        increase_arrows += 1
+        upgrade_operator_cost = OmegaNum.floor(OmegaNum.arrow(upgrade_operator_cost, increase_arrows+1, 1.1))
+        upgrade3.innerText = `Increase upgrade operator (+1) ($${upgrade_operator_cost})`
+        if (increase_arrows == 0) {optext = "x"}
+        else if (increase_arrows == 1) {optext = "^"}
+        else {optext = "^".repeat(increase_arrows)}
+        upgrade1.innerText = `Increase click amount (${optext}${increase_amt}) ($${increase_cost})`
+      }
+    })
+  </script>
+</body>
+</html>
