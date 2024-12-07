@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Christmas Piano</title>
+  <!-- red themecol -->
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    .piano {
+      position: relative;
+    }
+    .piano button {
+      all: unset;
+      width: 5rem;
+      height: 15rem;
+      background-color: rgb(245, 112, 112);
+      margin: 0;
+      padding: 0;
+      border: 1px solid #ff00002f;
+
+      background-image: url("christmas.jpg");
+      background-size: 5rem 15rem;
+      background-blend-mode: multiply;
+      cursor: pointer;
+    }
+    .piano .blacks button {
+      width: 4rem;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      height: 10rem;
+      background-color: darkgreen;
+      border: 1px solid #00ff002f;
+      background-size: 4rem 10rem;
+    }
+    .blacks {
+      position: absolute;
+      top: 0;
+      left: 2.5rem;
+    }
+    .blacks .spacer {
+      width: 4rem;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      display: inline-block;
+      height: 1px;
+    }
+    .piano * {
+      gap: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <h1>The Christmas Piano</h1>
+  <p>oh boy</p>
+  <br>
+  <br>
+  <div class="piano">
+    <div class="whites">
+      <button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button><button></button>
+    </div>
+    <div class="blacks">
+      <button></button><button></button><div class="spacer"></div><button></button><button></button><button></button><div class="spacer"></div><button>
+    </div>
+  </div>
+  <audio src="notes/c.ogg" preload></audio>
+  <audio src="notes/d.ogg" preload></audio>
+  <audio src="notes/e.ogg" preload></audio>
+  <audio src="notes/f.ogg" preload></audio>
+  <audio src="notes/g.ogg" preload></audio>
+  <audio src="notes/a.ogg" preload></audio>
+  <audio src="notes/b.ogg" preload></audio>
+  <audio src="notes/chigh.ogg" preload></audio>
+  <audio src="notes/dhigh.ogg" preload></audio>
+  <audio src="notes/csharp.ogg" preload></audio>
+  <audio src="notes/dsharp.ogg" preload></audio>
+  <audio src="notes/fsharp.ogg" preload></audio>
+  <audio src="notes/gsharp.ogg" preload></audio>
+  <audio src="notes/asharp.ogg" preload></audio>
+  <audio src="notes/csharphigh.ogg" preload></audio>
+  <script defer>
+    let whites = [
+      "c.ogg",
+      "d.ogg",
+      "e.ogg",
+      "f.ogg",
+      "g.ogg",
+      "a.ogg",
+      "b.ogg",
+      "chigh.ogg",
+      "dhigh.ogg",
+    ]
+    let blacks = [
+      "csharp.ogg",
+      "dsharp.ogg",
+      "fsharp.ogg",
+      "gsharp.ogg",
+      "asharp.ogg",
+      "csharphigh.ogg",
+    ]
+    let i = 0
+    for (button of document.querySelectorAll(".whites button")) {
+      let thing = whites[i++]
+      console.log(thing)
+      button.addEventListener("click", ()=>{
+        document.querySelector(`audio[src="notes/${thing}"]`).currentTime = 0
+        document.querySelector(`audio[src="notes/${thing}"]`).play()
+      })
+    }
+    i = 0
+    for (button of document.querySelectorAll(".blacks button")) {
+      let thing = blacks[i++]
+      console.log(thing)
+      button.addEventListener("click", ()=>{
+        document.querySelector(`audio[src="notes/${thing}"]`).currentTime = 0
+        document.querySelector(`audio[src="notes/${thing}"]`).play()
+      })
+    }
+  </script>
+</body>
+</html>
