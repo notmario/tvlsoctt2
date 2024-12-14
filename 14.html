@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>the christmas accelerator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+    div {
+      text-align: center;
+    }
+    img {
+      width: 8rem;
+      height: 8rem;
+    }
+    img[src="./christmas.jpg"] {
+      width: 16rem;
+      height: 16rem;
+    }
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <div>
+    <h1>The Christmas Accelerator</h1>
+    <p>yay!!</p>
+    <br>
+    <br>
+    <br>
+    <img src="./christmas.jpg" alt="christmas">
+    <br>
+    <br>
+    <br>
+    <br>
+    <img src="switchoff.png" alt="sigma">
+  </div>
+  <script defer>
+    // on image click, make it spin 360 degrees
+    let spin = 0;
+    let velocity = 0;
+
+    let on = false;
+    let lastTrigger = performance.now();
+    let timer = 2500
+
+    document.querySelector('img[alt="sigma"]').addEventListener('click', () => {
+      // new Audio('./yay.ogg').play();
+      // velocity += 10;
+      on = !on
+      if (on) {
+        document.querySelector('img[alt="sigma"]').src = "switchon.jpg"
+      } else {
+        document.querySelector('img[alt="sigma"]').src = "switchoff.png"
+      }
+    });
+    let q = () => {
+      spin += velocity;
+      velocity *= 0.99;
+      document.querySelector('img').style.transform = `rotate(${spin}deg)`;
+      requestAnimationFrame(q);
+      if (on) {
+        ct -= 1/60
+        if (ct < performance.now() - timer) {
+          new Audio('./yay.ogg').play();
+          velocity += 10;
+          ct += timer
+          timer *= 0.9
+        }
+      } else {
+        timer = 2500
+        ct = performance.now() - timer
+      }
+    }
+    q();
+  </script>
+</body>
+</html>
