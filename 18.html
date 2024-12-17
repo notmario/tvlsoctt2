@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mace's christmas spectacular</title>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Titillium Web', sans-serif;
+    }
+    body {
+      margin: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: calc(100vw - 2rem);
+      height: calc(100vh - 2rem);
+    }
+    a {
+      color: black;
+      text-decoration: none;
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+    }
+
+    .chat {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      margin: 10px;
+      padding: 5px;
+    }
+    /* css grid two column */
+  </style>
+</head>
+<body>
+  <a href="./index.html">back</a>
+  <h1>vine boom button</h1>
+  <div class="bro" style="position:absolute;top:0;right:0;">
+    by
+    <img src="./smartie.png">
+  </div>
+  <iframe width="110" height="200" src="https://www.myinstants.com/instant/vine-boom-sound-70972/embed/" frameborder="0" scrolling="no"></iframe>
+  <button class="chat" onclick="chat()" id="poo">
+    secret bluhtton (this is real chat)
+  </button>
+  <div style="display: none; position: absolute; margin-left: auto; margin-right: auto;" id="chat2">
+    <img src="eye.png" alt="eye" id="chat2img">
+  </div>
+</body>
+</html>
+
+<script>
+  var messages = [
+    'zest it up',
+    'stop pressing this',
+    'you are a madman',
+    'you are a macadamia nut',
+    'press to kill santa',
+    'YOU KILLED HIM!',
+    'just kidding',
+    'the end'
+  ];
+
+  function chat() {
+    document.getElementById("chat2").style.display = "block";
+    document.getElementById("poo").innerText = messages[0];
+
+    if (messages.length > 1) {
+      messages.shift();
+    }
+
+    let i = 10;
+    let audio = new Audio('JingleBells-Instrumental-.ogg');
+    audio.play();
+
+    setInterval(() => {
+      document.getElementById("chat2img").style.width = i + "px";
+      document.getElementById("chat2img").style.height = i + "px";
+      i += 1;
+    }, 10);
+  }
+</script>
