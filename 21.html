@@ -4,12 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Christmas Jollifier</title>
-  <!-- red themecol -->
-  <meta name="theme-color" content="#ff0000">
-  <link rel="shortcut icon" href="favicon.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>the christmas black jack</title>
   <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet"> 
   <link rel="stylesheet" href="style.css">
   <style>
@@ -21,16 +16,7 @@
     }
     body {
       margin: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
       width: calc(100vw - 2rem);
-      height: calc(100vh - 2rem);
-    }
-    #clock {
-      font-size: 5rem;
-      font-weight: bold;
     }
     a {
       color: black;
@@ -39,331 +25,473 @@
       top: 1rem;
       left: 1rem;
     }
-    .start, .sigma {
-      text-align: center;
-    }
-    .tools {
-      width: calc(512px + 8 * 2px);
-      display: grid;
-      gap:2px;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    }
-    .tools button {
-      width: 64px;
-      height: 64px;
+    img {
+      width: 16rem;
+      height: 16rem;
     }
   </style>
 </head>
 <body>
   <a href="./index.html">back</a>
-  <h1>The Christmas Jollifier</h1>
-  <div class="start">
-    <input type="file" name="balls" id="input" accept="image/*">
-  </div>
-  <div class="sigma" style="display:none">
-    <canvas></canvas>
-    <br>
-    <div class="tools">
-      <button class="move-btn">move</button>
-      <button class="rot-btn">rot</button>
-      <button class="scale-btn">scale</button>
-      <div></div>
-      <div></div>
-      <div></div>
-      <button class="ld-btn">&lt;</button>
-      <button class="lu-btn">&gt;</button>
-      <button class="hue-btn">hue</button>
-      <button class="alpha-btn">alpha</button>
-      <button class="remove-btn">kill</button>
-      <div></div>
-      <div></div>
-      <button class="add-text" aria-label="black">black words</button>
-      <button class="add-text" aria-label="white">white words</button>
-      <button class="add-text" aria-label="red">red words</button>
-      <button class="add-img" aria-label="jolly/balls.png;0.4">balls</button>
-      <button class="add-img" aria-label="jolly/tinsel.png;0.7">tinsel W</button>
-      <button class="add-img" aria-label="jolly/tinselred.png;0.7">tinsel R</button>
-      <button class="add-img" aria-label="jolly/present.png;0.7">present</button>
-      <button class="add-img" aria-label="jolly/red-aura.png;0.7">jolly aura</button>
-      <button class="add-img" aria-label="jolly/white-square.png;0.7">white square</button>
-      <button class="add-img" aria-label="jolly/black-square.png;0.7">black square</button>
-      <button class="add-img" aria-label="jolly/red-square.png;0.7">red square</button>
-      <button class="add-img" aria-label="jolly/holly.png;0.5">holly</button>
-      <button class="add-img" aria-label="jolly/tree.png;1.0">tree</button>
-      <button class="add-img" aria-label="jolly/wreath.png;0.5">wreath</button>
-      <button class="add-img" aria-label="jolly/santa.png;0.3">santa hat</button>
-      <button class="add-img" aria-label="jolly/lights.png;0.05">lights</button>
-      <button class="add-img" aria-label="jolly/star.png;0.5">star</button>
-      <button class="add-img" aria-label="jolly/cane.png;0.5">cane</button>
-      <button class="add-img" aria-label="jolly/jollyamong.png;0.5">sus</button>
-    </div>
-    <p>to capture your masterpiece press "layer down" until there<br/>is no more, then right click and save image</p>
-  </div>
-  <script defer>
-    let canvas = document.querySelector('canvas')
-    let ctx = canvas.getContext('2d');
-    let base_image = new Image;
-    let base_sf = 1;
-
-    let layers = [];
-
-    let active_layer;
-
-    let mousedown = false;
-    let mode = "scale";
-
-    base_image.onload = function() {
-      let [w, h] = [base_image.naturalWidth, base_image.naturalHeight]
-
-      let sf = 1;
-      sf = 512 / w
-      if (h > w) { sf = 512 / h }
-
-      base_sf = sf
-
-      canvas.width = base_image.naturalWidth * sf
-      canvas.height = base_image.naturalHeight * sf
-
-      document.querySelector(".start").style.display = "none"
-      document.querySelector(".sigma").style.display = "unset"
-
-      render();
-    }
-
-    document.querySelector("input").addEventListener("input", (e)=>{
-      console.log(e.target.files)
-      base_image.src = URL.createObjectURL(e.target.files[0]);
-    })
-
-    document.querySelector(".move-btn").addEventListener("click", ()=>{
-      mode = "move"
-    })
-    document.querySelector(".rot-btn").addEventListener("click", ()=>{
-      mode = "rotate"
-    })
-    document.querySelector(".scale-btn").addEventListener("click", ()=>{
-      mode = "scale"
-    })
-    document.querySelector(".hue-btn").addEventListener("click", ()=>{
-      mode = "hue"
-    })
-    document.querySelector(".alpha-btn").addEventListener("click", ()=>{
-      mode = "alpha"
-    })
-    document.querySelector(".remove-btn").addEventListener("click", ()=>{
-      if (active_layer != undefined) {
-        layers.pop(active_layer)
-        if (active_layer == layers.length) {
-          active_layer -= 1
-        }
-        if (active_layer < 0) {active_layer = undefined}
-      }
-    })
-    document.querySelector(".ld-btn").addEventListener("click", ()=>{
-      if (active_layer != undefined && active_layer > 0) {
-        active_layer -= 1
-      } else if (active_layer == 0) {
-        active_layer = undefined
-      }
-    })
-    document.querySelector(".lu-btn").addEventListener("click", ()=>{
-      if (active_layer != undefined && active_layer < layers.length - 1) {
-        active_layer += 1
-      } else if (active_layer == undefined && layers.length != 0) {
-        active_layer = 0
-      }
-    })
-
-    document.querySelectorAll(".add-img").forEach((elem) => {
-      let data = elem.ariaLabel.split(";")
-      elem.addEventListener("click", (e)=>{
-        let new_layer = {}
-        new_layer.x = canvas.width / 2
-        new_layer.y = canvas.height / 2
-        new_layer.scale = data[1] - 0
-        new_layer.rot = 0
-        new_layer.huerot = 0
-        new_layer.alpha = 1
-
-        new_layer.img = new Image;
-        new_layer.img.src = data[0]
-
-        layers.push(new_layer)
-
-        active_layer = layers.length - 1
-
-        mode = "move"
-      })
-    })
-
-    document.querySelectorAll(".add-text").forEach((elem) => {
-      let data = elem.ariaLabel
-      elem.addEventListener("click", (e)=>{
-        let new_layer = {}
-        new_layer.x = canvas.width / 2
-        new_layer.y = canvas.height / 2
-        new_layer.scale = 1
-        new_layer.rot = 0
-        new_layer.huerot = 0
-        new_layer.alpha = 1
-
-        new_layer.text = prompt("what is it")
-        new_layer.col = data
-
-        if (new_layer.text) {
-          layers.push(new_layer)
-
-          active_layer = layers.length - 1
-
-          mode = "move"
-        }
-      })
-    })
-
-    document.addEventListener("mousedown", ()=>{
-      mousedown = true
-    })
-
-    document.addEventListener("mouseup", ()=>{
-      mousedown = false
-    })
-
-    document.addEventListener("mousemove", (e)=>{
-      if (mode == "move") {
-        if (active_layer != undefined && mousedown) {
-          layers[active_layer].x += e.movementX
-          layers[active_layer].y += e.movementY
-        }
-      } else if (mode == "rotate") {
-        if (active_layer != undefined && mousedown) {
-          let [real_x, real_y] = [
-            layers[active_layer].x + canvas.offsetLeft,
-            layers[active_layer].y + canvas.offsetTop,
-          ]
-          
-          let [old_x, old_y] = [
-            e.clientX - e.movementX,
-            e.clientY - e.movementY
-          ]
-
-          let old_angle = Math.atan2(real_y - old_y, real_x - old_x)
-          let new_angle = Math.atan2(real_y - e.clientY, real_x - e.clientX)
-
-          layers[active_layer].rot += new_angle - old_angle
-        }
-      } else if (mode == "scale") {
-        if (active_layer != undefined && mousedown) {
-          let [real_x, real_y] = [
-            layers[active_layer].x + canvas.offsetLeft,
-            layers[active_layer].y + canvas.offsetTop,
-          ]
-          
-          let [old_x, old_y] = [
-            e.clientX - e.movementX,
-            e.clientY - e.movementY
-          ]
-
-          let old_dist = Math.sqrt((real_y - old_y) ** 2 + (real_x - old_x) ** 2)
-          let new_dist = Math.sqrt((real_y - e.clientY) ** 2 + (real_x - e.clientX) ** 2)
-
-          layers[active_layer].scale *= new_dist / old_dist
-          if (layers[active_layer].scale < 0.01) {
-            layers[active_layer].scale = 0.01
-          }
-        }
-      } else if (mode == "hue") {
-        if (active_layer != undefined && mousedown) {
-          layer.huerot += e.movementX * 2
-          layer.huerot += e.movementY * 2
-          if (layer.huerot < 0) {layer.huerot += 360}
-        }
-      } else if (mode == "alpha") {
-        if (active_layer != undefined && mousedown) {
-          layer.alpha += e.movementX / 100
-          layer.alpha += e.movementY / 100
-          if (layer.alpha < 0) {layer.alpha = 0}
-          if (layer.alpha > 1) {layer.alpha = 1}
-        }
-      }
-    })
-
-    let render = () => {
-      ctx.save();
-
-      ctx.scale(base_sf, base_sf);
-
-      ctx.drawImage(base_image, 0,0);
-
-      ctx.restore();
-
-      let i = 0
-      for (layer of layers) {
-        ctx.save();
-
-        ctx.translate(layer.x, layer.y);
-
-        ctx.scale(layer.scale, layer.scale);
-
-        ctx.rotate(layer.rot);
-
-        if (layer.text) {
-          ctx.font = "64px Arial"
-          ctx.fillStyle = layer.col
-
-          let dimensions = ctx.measureText(layer.text);
-
-          if (layer.huerot != 0) {
-            ctx.filter = `hue-rotate(${layer.huerot}deg)`;
-          }
-          ctx.globalAlpha = layer.alpha;
-
-          ctx.translate(-(dimensions.width) / 2, 32)
-
-          ctx.fillText(layer.text, 0, 0)
-
-          ctx.filter = "none";
-
-          ctx.globalAlpha = 1;
-
-          if (active_layer == i++) {
-            ctx.fillStyle = "#FF00FF1F"
-            ctx.strokeStyle = "#FFFF008F"
-            ctx.lineWidth = 4
-            // if (mode != "hue") {
-            //   ctx.fillRect(0, 0, layer.img.naturalWidth, layer.img.naturalHeight)
-            // }
-            ctx.strokeRect(0, -64, dimensions.width, 64)
-          }
-        } else {
-          ctx.translate(-layer.img.naturalWidth / 2, -layer.img.naturalHeight / 2);
-
-          if (layer.huerot != 0) {
-            ctx.filter = `hue-rotate(${layer.huerot}deg)`;
-          }
-
-          ctx.globalAlpha = layer.alpha;
-
-          ctx.drawImage(layer.img, 0, 0);
-          ctx.filter = "none";
-
-          ctx.globalAlpha = 1;
-
-          if (active_layer == i++) {
-            ctx.fillStyle = "#FF00FF1F"
-            ctx.strokeStyle = "#FFFF008F"
-            ctx.lineWidth = 4
-            // if (mode != "hue") {
-            //   ctx.fillRect(0, 0, layer.img.naturalWidth, layer.img.naturalHeight)
-            // }
-            ctx.strokeRect(0, 0, layer.img.naturalWidth, layer.img.naturalHeight)
-          }
-        }
-
-        ctx.restore();
-      }
-
-      requestAnimationFrame(render)
-    }
-  </script>
+  <h1>The Christmas Blackjack</h1>
+  <p>You have a queen and a 2</p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>Do you hit or stand? (scroll for hit, shut down pc for stand)</p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>You are on 20!!!!! (you got a 8 of clubmonds)</p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>scroll for hit DM your favourite person whose name begins with M and ends ACKY "*giggles cutely like a patootie*" to stand</p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>you got an ace! 21! like the date! you win!!!!!!</p>
 </body>
 </html>
+16.html
+5 KB
