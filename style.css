@@ -41,11 +41,14 @@ div.grid div:not(.gray):not(.hollow) {
 div.grid div:not(.gray):not(.hollow):nth-child(2n) {
   background-color: #f00;
 }
-div.grid div.guest {
+div.grid div.guest, div.mid {
   overflow: hidden;
 }
 div.grid div.guest a {
   background: repeating-linear-gradient(115deg, #00000000 0%, #00000000 15%, #00000010 15%, #00000010 30%);
+}
+div.grid div.mid a {
+  background: #000000a0;
 }
 div.grid div a {
   display: flex;
